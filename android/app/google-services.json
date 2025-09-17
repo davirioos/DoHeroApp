@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "811051970091",
+    "project_id": "dohero-5a883",
+    "storage_bucket": "dohero-5a883.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:811051970091:android:1f2d88c8b58e0da500846e",
+        "android_client_info": {
+          "package_name": "com.anonymous.taskGamificado"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApzZvRFfzFOJXE3XzNsHEMdFPDbU4OJn8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
