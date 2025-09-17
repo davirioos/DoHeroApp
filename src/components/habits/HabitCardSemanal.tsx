@@ -38,7 +38,6 @@ const weekDaysShort = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
 const getFormattedDate = (date: Date) => date.toISOString().split("T")[0];
 
 export default function HabitCardSemanal({ habit, onEdit, onDelete }: Props) {
-  // Usando um seletor para pegar a função do store.
   const completeHabit = useHabitStore((state) => state.completeHabit);
   const week = getWeekDays();
 
@@ -101,19 +100,21 @@ export default function HabitCardSemanal({ habit, onEdit, onDelete }: Props) {
               dayToCompare > today || dayToCompare < creationDate;
 
             return (
-              <View key={dayFormatted} style={styles.dayWrapper}>
-                <Text style={styles.dayLabel}>{weekDaysShort[index]}</Text>
-                <TouchableOpacity
-                  style={[
-                    styles.dayBox,
-                    isCompleted && styles.dayBoxCompleted,
-                    isToday && styles.dayBoxToday,
-                    isDisabled && styles.dayBoxDisabled,
-                  ]}
-                  onPress={() => completeHabit(habit.id, day)}
-                  disabled={isDisabled}
-                />
-              </View>
+              <React.Fragment key={dayFormatted}>
+                <View style={styles.dayWrapper}>
+                  <Text style={styles.dayLabel}>{weekDaysShort[index]}</Text>
+                  <TouchableOpacity
+                    style={[
+                      styles.dayBox,
+                      isCompleted && styles.dayBoxCompleted,
+                      isToday && styles.dayBoxToday,
+                      isDisabled && styles.dayBoxDisabled,
+                    ]}
+                    onPress={() => completeHabit(habit.id, day)}
+                    disabled={isDisabled}
+                  />
+                </View>
+              </React.Fragment>
             );
           })}
         </View>
@@ -126,6 +127,7 @@ export default function HabitCardSemanal({ habit, onEdit, onDelete }: Props) {
   );
 }
 
+// Estilos continuam os mesmos
 const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: "#fff",

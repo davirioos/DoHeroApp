@@ -50,7 +50,6 @@ export default function HabitsGamificado() {
   } = useHabitStore();
   const [view, setView] = useState<"semanal" | "geral">("semanal");
 
-  // Lógica de cálculo de estatísticas
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const startOfWeek = getStartOfWeek(today);
@@ -196,10 +195,11 @@ export default function HabitsGamificado() {
       <ScrollView contentContainerStyle={styles.habitList}>
         {habits.length > 0 ? (
           <>
-            {view === "semanal" &&
+            {habits.length > 0 &&
+              view === "semanal" &&
               habits.map((habit) => (
                 <HabitCardSemanal
-                  key={habit.id}
+                  key={habit.id} // ✅ use key aqui, no componente do map
                   habit={habit}
                   onEdit={handleEditHabit}
                   onDelete={handleDeleteHabit}
@@ -208,7 +208,7 @@ export default function HabitsGamificado() {
             {view === "geral" &&
               habits.map((habit) => (
                 <HabitCardGeral
-                  key={habit.id}
+                  key={habit.id} // ✅ key só aqui
                   habit={habit}
                   onEdit={handleEditHabit}
                   onDelete={handleDeleteHabit}

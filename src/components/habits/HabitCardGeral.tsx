@@ -55,7 +55,11 @@ const MonthGrid = ({
   const grid = [];
 
   for (let i = 0; i < firstDayOfMonth; i++) {
-    grid.push(<View key={`empty-${i}`} style={styles.dayCell} />);
+    grid.push(
+      <React.Fragment key={`empty-${i}`}>
+        <View style={styles.dayCell} />
+      </React.Fragment>
+    );
   }
 
   for (let day = 1; day <= totalDaysInMonth; day++) {
@@ -64,10 +68,11 @@ const MonthGrid = ({
     const isCompleted = completedDays.includes(dateString);
 
     grid.push(
-      <View
-        key={day}
-        style={[styles.dayCell, isCompleted && styles.dayCellCompleted]}
-      />
+      <React.Fragment key={day}>
+        <View
+          style={[styles.dayCell, isCompleted && styles.dayCellCompleted]}
+        />
+      </React.Fragment>
     );
   }
 
@@ -149,6 +154,7 @@ export default function HabitCardGeral({ habit, onEdit, onDelete }: Props) {
   );
 }
 
+// Estilos continuam os mesmos
 const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: "#fff",
@@ -171,13 +177,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: scale(10),
     color: "#333",
-    flex: 1, // <<< --- CORREÇÃO AQUI
+    flex: 1,
   },
   totalText: {
     fontSize: RFValue(12),
     fontWeight: "bold",
     color: "#888",
-    marginLeft: scale(10), // Adiciona um espaço
+    marginLeft: scale(10),
   },
   monthsWrapper: {
     flexDirection: "row",

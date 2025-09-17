@@ -2,7 +2,11 @@
 
 import CustomTabBar from "@/src/components/CustomTabBar";
 import { Tabs } from "expo-router";
-import { Image } from "react-native";
+import Checkbox from "../../../src/assets/icons/checkbox.svg";
+import Habit from "../../../src/assets/icons/document-signed.svg";
+import Monster from "../../../src/assets/icons/scary-monster.svg";
+import Ranking from "../../../src/assets/icons/shield-check.svg";
+import Statistica from "../../../src/assets/icons/stats.svg";
 
 export default function TabLayout() {
   return (
@@ -14,17 +18,15 @@ export default function TabLayout() {
     >
       {/* 1. TAREFAS (index.tsx) - Colocada em primeiro lugar */}
       <Tabs.Screen
-        name="task" // Certifique-se que o arquivo se chama index.tsx
+        name="task"
         options={{
           title: "Tarefas",
-          tabBarIcon: ({ color, size, focused }) => (
-            <Image
-              source={require("../../../src/assets/icons/TarefasIcon.png")}
-              style={{
-                width: size,
-                height: size,
-                tintColor: focused ? "#101010" : "#FFF",
-              }}
+          tabBarIcon: ({ size, focused }) => (
+            <Checkbox
+              width={size}
+              height={size}
+              // Correção: Use a prop 'fill' para colorir o SVG
+              fill={focused ? "#101010" : "#FFF"}
             />
           ),
         }}
@@ -35,14 +37,11 @@ export default function TabLayout() {
         name="habits"
         options={{
           title: "Hábitos",
-          tabBarIcon: ({ color, size, focused }) => (
-            <Image
-              source={require("../../../src/assets/icons/HabitosIcon.png")}
-              style={{
-                width: size,
-                height: size,
-                tintColor: focused ? "#101010" : "#FFF",
-              }}
+          tabBarIcon: ({ size, focused }) => (
+            <Habit
+              width={size}
+              height={size}
+              fill={focused ? "#101010" : "#FFF"}
             />
           ),
         }}
@@ -53,14 +52,11 @@ export default function TabLayout() {
         name="ranking"
         options={{
           title: "Ranking",
-          tabBarIcon: ({ color, size, focused }) => (
-            <Image
-              source={require("../../../src/assets/icons/RankingIcon.png")}
-              style={{
-                width: size,
-                height: size,
-                tintColor: focused ? "#101010" : "#FFF",
-              }}
+          tabBarIcon: ({ size, focused }) => (
+            <Ranking
+              width={size}
+              height={size}
+              fill={focused ? "#101010" : "#FFF"}
             />
           ),
         }}
@@ -71,14 +67,11 @@ export default function TabLayout() {
         name="boss"
         options={{
           title: "Monstro",
-          tabBarIcon: ({ color, size, focused }) => (
-            <Image
-              source={require("../../../src/assets/icons/MonstroIcon.png")}
-              style={{
-                width: size,
-                height: size,
-                tintColor: focused ? "#101010" : "#FFF",
-              }}
+          tabBarIcon: ({ size, focused }) => (
+            <Monster
+              width={size}
+              height={size}
+              fill={focused ? "#101010" : "#FFF"}
             />
           ),
         }}
@@ -89,14 +82,11 @@ export default function TabLayout() {
         name="statistic"
         options={{
           title: "Perfil",
-          tabBarIcon: ({ color, size, focused }) => (
-            <Image
-              source={require("../../../src/assets/icons/EstatisticaIcon.png")}
-              style={{
-                width: size,
-                height: size,
-                tintColor: focused ? "#101010" : "#FFF",
-              }}
+          tabBarIcon: ({ size, focused }) => (
+            <Statistica
+              width={size}
+              height={size}
+              fill={focused ? "#101010" : "#FFF"}
             />
           ),
         }}

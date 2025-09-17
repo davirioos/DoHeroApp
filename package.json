@@ -1,7 +1,7 @@
 {
   "name": "taskgamificado",
   "main": "expo-router/entry",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
@@ -68,7 +68,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@types/react": "~18.2.45",
+    "@types/react": "~18.2.79",
     "eslint": "^8.57.0",
     "eslint-config-expo": "^7.0.0",
     "typescript": "~5.3.3"
