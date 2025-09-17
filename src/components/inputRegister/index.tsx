@@ -1,3 +1,5 @@
+// src/components/inputRegister/index.tsx
+import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -31,7 +33,7 @@ export default function InputRegister({
     handleSubmit,
     formState: { errors, touchedFields, isSubmitted },
   } = useForm<Inputs>({
-    mode: "onBlur", // só mostra erro após sair do campo
+    mode: "onBlur",
     reValidateMode: "onBlur",
     shouldFocusError: false,
   });
@@ -123,32 +125,38 @@ export default function InputRegister({
       {errors.password && (touchedFields.password || isSubmitted) && (
         <Text style={styles.errorText}>{errors.password.message}</Text>
       )}
+
+      {/* --- CHECKBOX MELHORADO --- */}
       <Controller
         control={control}
         name="termos"
         rules={{ required: "Você precisa aceitar os termos." }}
+        defaultValue={false} // Adicionado valor padrão
         render={({ field: { onChange, value } }) => (
           <TouchableOpacity
+            style={styles.checkboxContainer}
             onPress={() => onChange(!value)}
-            style={{ flexDirection: "row", alignItems: "center" }}
           >
             <View
-              style={{
-                width: moderateScale(20),
-                height: moderateScale(20),
-                borderColor: "#000",
-                borderWidth: 1,
-                marginRight: scale(8),
-                backgroundColor: value ? "#4caf50" : "#fff",
-              }}
-            />
-            <Text style={{ color: "#5EA6FF", fontSize: RFValue(12) }}>
+              style={[styles.checkboxBase, value && styles.checkboxChecked]}
+            >
+              {value && (
+                <Ionicons
+                  name="checkmark"
+                  size={moderateScale(16)}
+                  color="#fff"
+                />
+              )}
+            </View>
+            <Text style={styles.checkboxLabel}>
               Eu li e concordo com os Termos de Uso
             </Text>
           </TouchableOpacity>
         )}
       />
-      {errors.termos && (touchedFields.termos || isSubmitted) && (
+      {/* --- FIM DO CHECKBOX MELHORADO --- */}
+
+      {errors.termos && (
         <Text style={styles.errorText}>{errors.termos.message}</Text>
       )}
     </View>
@@ -170,9 +178,35 @@ const styles = StyleSheet.create({
     color: "red",
     marginBottom: verticalScale(8),
     fontSize: RFValue(12),
+    marginTop: verticalScale(-5), // Ajuste para ficar mais próximo do campo
   },
   title: {
     color: "#fff",
     fontSize: RFValue(14),
+  },
+  // --- NOVOS ESTILOS PARA O CHECKBOX ---
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: verticalScale(10),
+    marginBottom: verticalScale(5),
+  },
+  checkboxBase: {
+    width: moderateScale(22),
+    height: moderateScale(22),
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: scale(10),
+    borderRadius: moderateScale(4),
+    borderWidth: 2,
+    borderColor: "#2ECC71",
+    backgroundColor: "transparent",
+  },
+  checkboxChecked: {
+    backgroundColor: "#2ECC71",
+  },
+  checkboxLabel: {
+    color: "#5EA6FF",
+    fontSize: RFValue(12),
   },
 });
