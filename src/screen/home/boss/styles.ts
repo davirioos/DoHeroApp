@@ -49,6 +49,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: moderateScale(20),
     borderRadius: moderateScale(15),
+    marginBottom: verticalScale(25),
   },
   rewardsTitle: {
     fontSize: RFValue(18),

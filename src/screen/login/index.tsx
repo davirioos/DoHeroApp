@@ -12,17 +12,17 @@ export default function Login() {
   const submitRef = React.useRef<() => void>(() => {});
   const [modalVisible, setModalVisible] = useState(false);
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = (data: any) => {
-    console.log("Tentando login com:", data.email);
+    setIsLoading(true);
     auth()
       .signInWithEmailAndPassword(data.email, data.password)
       .then(() => {
-        console.log("Usuário logado com sucesso!");
         router.replace("/private");
       })
       .catch((error) => {
-        console.error("Erro no login:", error.code);
+        console.error("Erro no login:", error.code); // Log para depuração
         if (error.code === "auth/invalid-credential") {
           Toast.show({
             type: "error",
@@ -60,7 +60,7 @@ export default function Login() {
         });
       })
       .catch((error) => {
-        console.error("Erro ao redefinir senha:", error);
+        console.error("Erro ao redefinir senha:", error); // Log para depuração
         Toast.show({
           type: "error",
           text1: "Erro",
@@ -106,7 +106,11 @@ export default function Login() {
               keyboardType="email-address"
               autoCapitalize="none"
             />
-            <ButtonMain title="Enviar" onPress={handlePasswordReset} />
+            <ButtonMain
+              title="Enviar"
+              onPress={() => submitRef.current()}
+              isLoading={isLoading}
+            />
             <TouchableOpacity
               style={styles.buttonClose}
               onPress={() => setModalVisible(false)}

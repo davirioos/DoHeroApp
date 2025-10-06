@@ -14,7 +14,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/icons/icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#101010"
       },
       "edgeToEdgeEnabled": true,
       "package": "com.anonymous.taskGamificado",
@@ -34,7 +34,7 @@
           "image": "./src/assets/icons/icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#101010"
         }
       ],
       "expo-font",

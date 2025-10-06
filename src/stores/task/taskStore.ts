@@ -1,5 +1,6 @@
 // src/stores/task/taskStore.ts
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import Toast from "react-native-toast-message";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -97,17 +98,50 @@ export const useTaskStore = create<TaskState>()(
       completeTask: (taskId) => {
         set((state) => {
           const task = state.tasks.find((t) => t.id === taskId);
-          if (!task || task.status === "failed") return;
+          if (!task) return;
 
+          const isOverdue = new Date(task.data) < new Date();
+
+          // Se a tarefa está pendente...
           if (task.status === "pending") {
-            task.status = "completed";
-            usePlayerStore.getState().addXp(task.xp);
-            usePlayerStore.getState().addGold(task.gold);
-            useBossStore.getState().dealDamage(task.xp);
-          } else {
+            task.status = "completed"; // Marca como concluída em ambos os casos.
+
+            // Se estiver atrasada, aplica a penalidade.
+            if (isOverdue) {
+              const xpPenalty = Math.round(task.xp * 0.5);
+              const goldPenalty = Math.round(task.gold * 0.5);
+              usePlayerStore.getState().removeXp(xpPenalty);
+              usePlayerStore.getState().removeGold(goldPenalty);
+              Toast.show({
+                type: "error",
+                text1: `Tarefa "${task.title}" concluída com atraso!`,
+                text2: `Você perdeu ${xpPenalty} XP e ${goldPenalty} Ouro.`,
+              });
+            } else {
+              // Se estiver dentro do prazo, concede as recompensas.
+              usePlayerStore.getState().addXp(task.xp);
+              usePlayerStore.getState().addGold(task.gold);
+              useBossStore.getState().dealDamage(task.xp);
+              Toast.show({
+                type: "success",
+                text1: "Missão Concluída!",
+                text2: `Você ganhou ${task.xp} XP e ${task.gold} de Ouro.`,
+              });
+            }
+          } else if (task.status === "completed") {
+            // Se já estava concluída, reverte para pendente e remove as recompensas (ou a penalidade)
             task.status = "pending";
-            usePlayerStore.getState().removeXp(task.xp);
-            usePlayerStore.getState().removeGold(task.gold);
+            if (isOverdue) {
+              // Se estava atrasada, devolve a penalidade
+              const xpPenalty = Math.round(task.xp * 0.5);
+              const goldPenalty = Math.round(task.gold * 0.5);
+              usePlayerStore.getState().addXp(xpPenalty);
+              usePlayerStore.getState().addGold(goldPenalty);
+            } else {
+              // Se não estava atrasada, remove as recompensas ganhas
+              usePlayerStore.getState().removeXp(task.xp);
+              usePlayerStore.getState().removeGold(task.gold);
+            }
           }
         });
         get().checkReiDasTarefas();
@@ -154,6 +188,7 @@ export const useTaskStore = create<TaskState>()(
           const now = new Date();
           state.tasks.forEach((task) => {
             if (task.status === "pending" && new Date(task.data) < now) {
+              // Apenas muda o status visualmente para 'failed', sem aplicar penalidade aqui.
               task.status = "failed";
             }
           });

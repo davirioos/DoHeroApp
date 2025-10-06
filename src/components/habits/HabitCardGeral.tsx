@@ -2,14 +2,7 @@
 import { Habit } from "@/src/stores/habit/habitStore";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import {
-  Animated,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import Swipeable from "react-native-gesture-handler/Swipeable";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 
@@ -85,60 +78,49 @@ const MonthGrid = ({
 };
 
 export default function HabitCardGeral({ habit, onEdit, onDelete }: Props) {
+  const creationDate = new Date(habit.id);
   const today = new Date();
   const monthsToDisplay = [];
 
-  for (let i = 0; i < 4; i++) {
-    const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
-    monthsToDisplay.push({ year: date.getFullYear(), month: date.getMonth() });
-  }
-  monthsToDisplay.reverse();
+  // Começa a contar a partir do primeiro dia do mês de criação do hábito
+  let currentDate = new Date(
+    creationDate.getFullYear(),
+    creationDate.getMonth(),
+    1
+  );
 
-  const renderRightActions = (
-    progress: Animated.AnimatedInterpolation<number>,
-    dragX: Animated.AnimatedInterpolation<number>
-  ) => {
-    const scale = dragX.interpolate({
-      inputRange: [-100, 0],
-      outputRange: [1, 0],
-      extrapolate: "clamp",
+  // Adiciona todos os meses desde a criação até o mês atual
+  while (currentDate <= today) {
+    monthsToDisplay.push({
+      year: currentDate.getFullYear(),
+      month: currentDate.getMonth(),
     });
-    return (
-      <View style={styles.rightActionsContainer}>
-        <TouchableOpacity
-          onPress={() => onDelete(habit.id)}
-          style={[styles.rightAction, styles.deleteAction]}
-        >
-          <Animated.View style={{ transform: [{ scale }] }}>
-            <Ionicons name="trash" size={moderateScale(24)} color="white" />
-          </Animated.View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => onEdit(habit)}
-          style={[styles.rightAction, styles.editAction]}
-        >
-          <Animated.View style={{ transform: [{ scale }] }}>
-            <Ionicons name="pencil" size={moderateScale(24)} color="white" />
-          </Animated.View>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+    currentDate.setMonth(currentDate.getMonth() + 1);
+  }
+
+  // Garante que a visualização sempre tenha no mínimo 4 meses,
+  // adicionando os próximos meses se necessário.
+  let lastMonthDate = new Date(today.getFullYear(), today.getMonth(), 1);
+  while (monthsToDisplay.length < 4) {
+    lastMonthDate.setMonth(lastMonthDate.getMonth() + 1);
+    monthsToDisplay.push({
+      year: lastMonthDate.getFullYear(),
+      month: lastMonthDate.getMonth(),
+    });
+  }
 
   return (
-    <Swipeable renderRightActions={renderRightActions}>
-      <View style={styles.cardContainer}>
-        <View style={styles.header}>
-          <Ionicons
-            name={habit.icon as any}
-            size={moderateScale(24)}
-            color="#555"
-          />
-          <Text style={styles.habitName}>{habit.nome}</Text>
-          <Text style={styles.totalText}>
-            {habit.diasCompletos.length} Total
-          </Text>
-        </View>
+    <View style={styles.cardContainer}>
+      <View style={styles.header}>
+        <Ionicons
+          name={habit.icon as any}
+          size={moderateScale(24)}
+          color="#555"
+        />
+        <Text style={styles.habitName}>{habit.nome}</Text>
+        <Text style={styles.totalText}>{habit.diasCompletos.length} Total</Text>
+      </View>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.monthsWrapper}>
           {monthsToDisplay.map(({ year, month }) => (
             <MonthGrid
@@ -149,8 +131,8 @@ export default function HabitCardGeral({ habit, onEdit, onDelete }: Props) {
             />
           ))}
         </View>
-      </View>
-    </Swipeable>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -187,13 +169,12 @@ const styles = StyleSheet.create({
   },
   monthsWrapper: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
+    justifyContent: "flex-start",
   },
   monthContainer: {
     alignItems: "flex-start",
     marginBottom: verticalScale(10),
-    width: "23%",
+    marginRight: scale(10), // Adicionado espaçamento entre os meses
   },
   monthLabel: {
     fontSize: RFValue(12),
@@ -214,24 +195,5 @@ const styles = StyleSheet.create({
   },
   dayCellCompleted: {
     backgroundColor: "#2ECC71",
-  },
-  rightActionsContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: verticalScale(15),
-  },
-  rightAction: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: scale(70),
-    height: "100%",
-    borderRadius: moderateScale(15),
-    marginLeft: scale(10),
-  },
-  deleteAction: {
-    backgroundColor: "#e74c3c",
-  },
-  editAction: {
-    backgroundColor: "#f39c12",
   },
 });

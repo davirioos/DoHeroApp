@@ -261,16 +261,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: verticalScale(20),
     width: "100%",
+    gap: verticalScale(10),
   },
   classButton: {
+    borderWidth: 1,
+    borderColor: "#2ECC71",
+    borderRadius: moderateScale(8),
     paddingVertical: verticalScale(10),
     paddingHorizontal: scale(15),
-    borderRadius: moderateScale(20),
-    margin: moderateScale(5),
-    backgroundColor: "#e0e0e0",
+    alignItems: "center",
+    marginBottom: verticalScale(5),
   },
   classButtonSelected: {
-    backgroundColor: "#939295",
+    backgroundColor: "#2ECC71",
   },
   classButtonText: {
     color: "#333",
@@ -281,7 +284,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   saveButton: {
-    backgroundColor: "#939295",
+    backgroundColor: "#2ECC71",
     padding: moderateScale(15),
     borderRadius: moderateScale(10),
     width: "100%",

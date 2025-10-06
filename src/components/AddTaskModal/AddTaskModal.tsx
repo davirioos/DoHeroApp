@@ -143,12 +143,18 @@ const AddTaskModal: React.FC = () => {
             onChangeText={setListTitle}
           />
           <View style={styles.buttonContainer}>
-            <Button
-              title="Voltar"
+            <TouchableOpacity
+              style={styles.stylesButtonNext}
               onPress={() => setView("options")}
-              color="#aaa"
-            />
-            <Button title="Adicionar Lista" onPress={handleAddList} />
+            >
+              <Text style={styles.stylesButtonAddText}>Voltar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.stylesButtonAdd}
+              onPress={handleAddList}
+            >
+              <Text style={styles.stylesButtonAddText}>Adicionar Lista</Text>
+            </TouchableOpacity>
           </View>
         </>
       );
@@ -213,12 +219,18 @@ const AddTaskModal: React.FC = () => {
             </Text>
           </TouchableOpacity>
           <View style={styles.buttonContainer}>
-            <Button
-              title="Voltar"
+            <TouchableOpacity
               onPress={() => setView("options")}
-              color="#aaa"
-            />
-            <Button title="Adicionar Missão" onPress={handleAddTask} />
+              style={styles.stylesButtonNext}
+            >
+              <Text style={styles.stylesButtonAddText}>Voltar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.stylesButtonAdd}
+              onPress={handleAddTask}
+            >
+              <Text style={styles.stylesButtonAddText}>Adicionar Missão</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       );
@@ -339,7 +351,7 @@ const styles = StyleSheet.create({
   },
   classButton: {
     borderWidth: 1,
-    borderColor: "#6200ee",
+    borderColor: "#2ECC71",
     borderRadius: moderateScale(8),
     paddingVertical: verticalScale(10),
     paddingHorizontal: scale(15),
@@ -347,10 +359,10 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(5),
   },
   classButtonSelected: {
-    backgroundColor: "#6200ee",
+    backgroundColor: "#2ECC71",
   },
   classButtonText: {
-    color: "#6200ee",
+    color: "#2ECC71",
     fontWeight: "bold",
   },
   classButtonTextSelected: {
@@ -396,6 +408,22 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: RFValue(16),
     fontWeight: "bold",
+  },
+  stylesButtonNext: {
+    backgroundColor: "#aaa",
+    justifyContent: "center",
+    borderRadius: moderateScale(5),
+    padding: moderateScale(10),
+  },
+  stylesButtonAdd: {
+    backgroundColor: "#2ECC71",
+    justifyContent: "center",
+    borderRadius: moderateScale(5),
+    padding: moderateScale(10),
+  },
+  stylesButtonAddText: {
+    color: "#fff",
+    fontSize: RFValue(16),
   },
 });
 

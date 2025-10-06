@@ -195,11 +195,10 @@ export default function HabitsGamificado() {
       <ScrollView contentContainerStyle={styles.habitList}>
         {habits.length > 0 ? (
           <>
-            {habits.length > 0 &&
-              view === "semanal" &&
+            {view === "semanal" &&
               habits.map((habit) => (
                 <HabitCardSemanal
-                  key={habit.id} // ✅ use key aqui, no componente do map
+                  key={habit.id} // ✅ key só aqui
                   habit={habit}
                   onEdit={handleEditHabit}
                   onDelete={handleDeleteHabit}

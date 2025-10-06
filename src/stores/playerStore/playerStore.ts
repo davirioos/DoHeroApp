@@ -18,7 +18,7 @@ interface PlayerState {
   titles: AchievementId[];
   currentTitle: AchievementId | null;
   isInitialized: boolean;
-  _hasHydrated: boolean; // <- ADICIONADO
+  _hasHydrated: boolean;
   setName: (name: string) => void;
   addXp: (amount: number) => void;
   addGold: (amount: number) => void;
@@ -26,7 +26,7 @@ interface PlayerState {
   removeGold: (amount: number) => void;
   addTitle: (title: AchievementId) => void;
   setCurrentTitle: (title: AchievementId) => void;
-  setHasHydrated: (state: boolean) => void; // <- ADICIONADO
+  setHasHydrated: (state: boolean) => void;
   reset: () => void;
 }
 
@@ -43,7 +43,7 @@ const initialState = {
   titles: [],
   currentTitle: null,
   isInitialized: false,
-  _hasHydrated: false, // <- ADICIONADO
+  _hasHydrated: false,
 };
 
 export const usePlayerStore = create<PlayerState>()(
@@ -146,7 +146,6 @@ export const usePlayerStore = create<PlayerState>()(
       },
 
       setHasHydrated: (state) => {
-        // <- ADICIONADO
         set({
           _hasHydrated: state,
         });
@@ -158,7 +157,6 @@ export const usePlayerStore = create<PlayerState>()(
       name: "player-storage",
       storage: createJSONStorage(() => AsyncStorage),
       onRehydrateStorage: () => (state) => {
-        // <- ADICIONADO
         state?.setHasHydrated(true);
       },
     }

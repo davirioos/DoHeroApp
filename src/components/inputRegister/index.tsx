@@ -1,5 +1,5 @@
-// src/components/inputRegister/index.tsx
 import { Ionicons } from "@expo/vector-icons";
+import { Link } from "expo-router";
 import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -31,19 +31,16 @@ export default function InputRegister({
   const {
     control,
     handleSubmit,
-    formState: { errors, touchedFields, isSubmitted },
+    formState: { errors },
   } = useForm<Inputs>({
     mode: "onBlur",
     reValidateMode: "onBlur",
     shouldFocusError: false,
   });
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      getSubmitHandler(handleSubmit(onSubmit));
-    }, 0);
 
-    return () => clearTimeout(timeout);
-  }, []);
+  useEffect(() => {
+    getSubmitHandler(handleSubmit(onSubmit));
+  }, [handleSubmit, onSubmit, getSubmitHandler]);
 
   return (
     <View>
@@ -52,7 +49,7 @@ export default function InputRegister({
         control={control}
         name="nome"
         rules={{
-          required: "Nome é obrigatória",
+          required: "Nome é obrigatório",
           minLength: {
             value: 3,
             message: "Nome deve ter ao menos 3 caracteres",
@@ -69,7 +66,7 @@ export default function InputRegister({
           />
         )}
       />
-      {errors.nome && (touchedFields.nome || isSubmitted) && (
+      {errors.nome && (
         <Text style={styles.errorText}>{errors.nome.message}</Text>
       )}
 
@@ -95,7 +92,7 @@ export default function InputRegister({
           />
         )}
       />
-      {errors.email && (touchedFields.email || isSubmitted) && (
+      {errors.email && (
         <Text style={styles.errorText}>{errors.email.message}</Text>
       )}
 
@@ -122,40 +119,44 @@ export default function InputRegister({
           />
         )}
       />
-      {errors.password && (touchedFields.password || isSubmitted) && (
+      {errors.password && (
         <Text style={styles.errorText}>{errors.password.message}</Text>
       )}
 
-      {/* --- CHECKBOX MELHORADO --- */}
       <Controller
         control={control}
         name="termos"
         rules={{ required: "Você precisa aceitar os termos." }}
-        defaultValue={false} // Adicionado valor padrão
+        defaultValue={false}
         render={({ field: { onChange, value } }) => (
-          <TouchableOpacity
-            style={styles.checkboxContainer}
-            onPress={() => onChange(!value)}
-          >
-            <View
-              style={[styles.checkboxBase, value && styles.checkboxChecked]}
-            >
-              {value && (
-                <Ionicons
-                  name="checkmark"
-                  size={moderateScale(16)}
-                  color="#fff"
-                />
-              )}
-            </View>
+          <View style={styles.checkboxContainer}>
+            <TouchableOpacity onPress={() => onChange(!value)}>
+              <View
+                style={[styles.checkboxBase, value && styles.checkboxChecked]}
+              >
+                {value && (
+                  <Ionicons
+                    name="checkmark"
+                    size={moderateScale(16)}
+                    color="#fff"
+                  />
+                )}
+              </View>
+            </TouchableOpacity>
             <Text style={styles.checkboxLabel}>
-              Eu li e concordo com os Termos de Uso
+              Eu li e concordo com os{" "}
+              <Link href="/terms">
+                <Text style={styles.linkText}>Termos de Uso</Text>
+              </Link>{" "}
+              e{" "}
+              <Link href="/privacy">
+                <Text style={styles.linkText}>Política de Privacidade</Text>
+              </Link>
+              .
             </Text>
-          </TouchableOpacity>
+          </View>
         )}
       />
-      {/* --- FIM DO CHECKBOX MELHORADO --- */}
-
       {errors.termos && (
         <Text style={styles.errorText}>{errors.termos.message}</Text>
       )}
@@ -178,18 +179,18 @@ const styles = StyleSheet.create({
     color: "red",
     marginBottom: verticalScale(8),
     fontSize: RFValue(12),
-    marginTop: verticalScale(-5), // Ajuste para ficar mais próximo do campo
+    marginTop: verticalScale(-5),
   },
   title: {
     color: "#fff",
     fontSize: RFValue(14),
   },
-  // --- NOVOS ESTILOS PARA O CHECKBOX ---
   checkboxContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginTop: verticalScale(10),
     marginBottom: verticalScale(5),
+    width: scale(250),
   },
   checkboxBase: {
     width: moderateScale(22),
@@ -206,7 +207,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#2ECC71",
   },
   checkboxLabel: {
-    color: "#5EA6FF",
+    color: "#fff",
     fontSize: RFValue(12),
+    flexShrink: 1, // Permite que o texto quebre a linha
+  },
+  linkText: {
+    color: "#5EA6FF",
+    textDecorationLine: "underline",
   },
 });

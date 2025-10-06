@@ -1,5 +1,6 @@
 // src/stores/bossStore/bossStore.ts
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
@@ -48,9 +49,17 @@ export const useBossStore = create<BossState>()(
         set((state) => {
           if (state.isDefeated) return;
           state.hp = Math.min(state.maxHp, state.hp + amount);
-          if (state.hp >= state.maxHp) {
+
+          // --- LÓGICA DE RECOMPENSA APLICADA AQUI ---
+          if (state.hp >= state.maxHp && !state.isDefeated) {
             state.isDefeated = true;
             usePlayerStore.getState().addGold(1000);
+            usePlayerStore.getState().addXp(500); // Adiciona o XP bônus
+            Toast.show({
+              type: "success",
+              text1: "Chefe Derrotado!",
+              text2: "Você ganhou 1000 de Ouro e 500 XP bônus!",
+            });
           }
         });
       },
@@ -61,10 +70,21 @@ export const useBossStore = create<BossState>()(
           return;
         }
 
+        // --- LÓGICA DE PENALIDADE APLICADA AQUI ---
         if (!isDefeated) {
-          const penalty = Math.round((maxHp - hp) * 0.5);
-          usePlayerStore.getState().removeXp(penalty);
+          const remainingHp = maxHp - hp;
+          const penalty = Math.round(remainingHp * 0.5);
+
+          if (penalty > 0) {
+            usePlayerStore.getState().removeXp(penalty);
+            Toast.show({
+              type: "error",
+              text1: "Desafio do Chefe Falhou!",
+              text2: `Você não derrotou o chefe e perdeu ${penalty} XP.`,
+            });
+          }
         }
+        // Reseta para a próxima semana, independentemente do resultado
         get().startNewWeek();
       },
 

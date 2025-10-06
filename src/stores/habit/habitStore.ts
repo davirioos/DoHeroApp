@@ -190,29 +190,9 @@ export const useHabitStore = create<HabitState>()(
         const lastCheck = get().lastCompletionCheck;
         if (lastCheck === todayStr) return;
 
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        const yesterdayStr = formatDateToYyyyMmDd(yesterday);
-
-        get().habits.forEach((habit) => {
-          const creationDate = new Date(habit.id);
-          creationDate.setHours(0, 0, 0, 0);
-          if (
-            creationDate > yesterday ||
-            habit.diasCompletos.includes(yesterdayStr)
-          ) {
-            return;
-          }
-          const xpPenalty = Math.round(habit.xp * 0.5);
-          const goldPenalty = Math.round(habit.gold * 0.5);
-          usePlayerStore.getState().removeXp(xpPenalty);
-          usePlayerStore.getState().removeGold(goldPenalty);
-          Toast.show({
-            type: "error",
-            text1: `Hábito "${habit.nome}" não concluído!`,
-            text2: `Você perdeu ${xpPenalty} XP e ${goldPenalty} Ouro.`,
-          });
-        });
+        // --- LÓGICA DE PENALIDADE REMOVIDA DAQUI ---
+        // A perda do "streak" é a consequência principal,
+        // gerenciada pela função checkAndUpdateStreak.
 
         set({ lastCompletionCheck: todayStr });
       },
