@@ -13,13 +13,11 @@
     },
     "production": {
       "autoIncrement": true,
-      "secrets": {
-        "file": [
-          {
-            "path": "./google-services.json",
-            "secret": "GOOGLE_SERVICES_JSON"
-          }
-        ]
+      "env": {
+        "GOOGLE_SERVICES_JSON_PATH": {
+          "type": "file_secret",
+          "name": "GOOGLE_SERVICES_JSON"
+        }
       }
     }
   },
