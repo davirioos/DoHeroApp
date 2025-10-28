@@ -13,8 +13,8 @@
     },
     "production": {
       "autoIncrement": true,
-      "fileSecrets": {
-        "googleServicesJson": {
+      "secrets": {
+        "file": {
           "path": "./google-services.json",
           "secret": "GOOGLE_SERVICES_JSON"
         }
