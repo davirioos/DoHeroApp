@@ -13,9 +13,12 @@
     },
     "production": {
       "autoIncrement": true,
-      "env": {
-        "GOOGLE_SERVICES_JSON_PATH": "@GOOGLE_SERVICES_JSON"
-      }
+      "fileSecrets": [
+        {
+          "secret": "GOOGLE_SERVICES_JSON",
+          "target": "./google-services.json"
+        }
+      ]
     }
   },
   "submit": {

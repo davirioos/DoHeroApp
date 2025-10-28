@@ -19,7 +19,7 @@ export default {
       edgeToEdgeEnabled: true,
       package: "com.anonymous.taskGamificado",
       // Esta é a linha que lê o segredo
-      googleServicesFile: process.env.GOOGLE_SERVICES_JSON_PATH,
+      googleServicesFile: "./google-services.json",
       compileSdkVersion: 35,
       targetSdkVersion: 35,
     },
